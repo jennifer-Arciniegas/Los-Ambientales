@@ -1,4 +1,6 @@
-DROP DATABASE Gestion_Parques_Naturales;
+
+DROP DATABASE IF EXISTS Gestion_Parques_Naturales;
+
 CREATE DATABASE Gestion_Parques_Naturales;
 USE Gestion_Parques_Naturales;
 
@@ -17,14 +19,14 @@ CREATE TABLE Departamento (
     FOREIGN KEY (Entidad_id) REFERENCES Entidad(ID)
 );
 
--- Crear la tabla Parque (renombrado de Parques en el ERD)
+-- Crear la tabla Parque
 CREATE TABLE Parque (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     fecha_declaracion DATE NOT NULL
 );
 
--- Crear la tabla Departamento_Parque (renombrado de Departamento_Parques en el ERD)
+-- Crear la tabla Departamento_Parque
 CREATE TABLE Departamento_Parque (
     Departamento_id INT NOT NULL,
     parque_id INT NOT NULL,
@@ -33,49 +35,47 @@ CREATE TABLE Departamento_Parque (
     FOREIGN KEY (parque_id) REFERENCES Parque(ID)
 );
 
--- Crear la tabla Area (renombrado de Areas en el ERD)
+-- Crear la tabla Area
 CREATE TABLE Area (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
-    extencion_hectareas DOUBLE NOT NULL, -- En el ERD se llama "Nombre_hectareas", pero lo mantengo como en tu script
+    extencion_hectareas DOUBLE NOT NULL,
     parque_id INT,
     FOREIGN KEY (parque_id) REFERENCES Parque(ID)
 );
 
--- Crear la tabla Especie (renombrado de Especies en el ERD)
+-- Crear la tabla Especie
 CREATE TABLE Especie (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     nombre_cientifico VARCHAR(100) NOT NULL,
     nombre_comun VARCHAR(50),
     numero_inventario INT NOT NULL,
-    tipo ENUM('Animal', 'Mineral', 'Vegetal') NOT NULL, -- Ajustado según tu script
+    tipo ENUM('Animal', 'Mineral', 'Vegetal') NOT NULL,
     Area_id INT,
     FOREIGN KEY (Area_id) REFERENCES Area(ID)
 );
 
--- Crear la tabla Cargo (nueva tabla del ERD, no estaba en tu script original)
+-- Crear la tabla Cargo
 CREATE TABLE Cargo (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
+    ID INT PRIMARY KEY,  -- No auto-increment, valores fijos 001, 002, 003, 004
+    nombre VARCHAR(50) NOT NULL,  -- Cambiado de ENUM a VARCHAR
     especialidad VARCHAR(50)
 );
+
 
 -- Crear la tabla Personal
 CREATE TABLE Personal (
     ID INT AUTO_INCREMENT PRIMARY KEY,
-    cedula VARCHAR(15) NOT NULL, -- En el ERD se llama "C_C", pero lo mantengo como "cedula"
+    cedula VARCHAR(15) NOT NULL,
     nombre VARCHAR(100) NOT NULL,
     Apellido1 VARCHAR(50) NOT NULL,
     Apellido2 VARCHAR(50) NOT NULL,
     direccion VARCHAR(50) NOT NULL,
     telefono VARCHAR(13),
     telefono_movil VARCHAR(13) NOT NULL,
-    tipoCodigo ENUM('001', '002', '003', '004'), -- No está en el ERD, lo mantengo de tu script
-    tipoPersonal ENUM('Gestion', 'Vigilancia', 'Conservacion', 'Investigador'), -- No está en el ERD, lo mantengo de tu script
-    especialidad VARCHAR(50), -- Este campo lo moveré a la tabla Cargo, pero lo mantengo aquí si lo necesitas
     sueldo DOUBLE NOT NULL,
     Area_id INT,
-    cargo_id INT, -- Añadido del ERD
+    cargo_id INT NOT NULL,  -- Requerido, referencia a Cargo
     FOREIGN KEY (Area_id) REFERENCES Area(ID),
     FOREIGN KEY (cargo_id) REFERENCES Cargo(ID)
 );
@@ -93,17 +93,15 @@ CREATE TABLE Vigilante_vehiculo (
     vehiculo_id INT,
     PRIMARY KEY (vigilante_id, vehiculo_id),
     FOREIGN KEY (vigilante_id) REFERENCES Personal(ID),
-    FOREIGN KEY (vehiculo_id) REFERENCES Vehiculo(ID)
-);
+    FOREIGN KEY (vehiculo_id) REFERENCES Vehiculo(ID));
 
--- Crear la tabla ProyectoInvestigacion (renombrado de Proyectos_Investigacion en el ERD)
+-- Crear la tabla ProyectoInvestigacion
 CREATE TABLE ProyectoInvestigacion (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     nombre TEXT NOT NULL,
     presupuesto DOUBLE NOT NULL,
-    inicioInvestigacio DATE NOT NULL, -- En el ERD es "Fecha_inicio"
-    finInvestigacion DATE, -- En el ERD es "Fecha_fin"
-    CONSTRAINT check_fechas CHECK (finInvestigacion IS NULL OR finInvestigacion > inicioInvestigacio) -- Añadido para validar fechas
+    inicioInvestigacion DATE NOT NULL,  -- Renombrado para consistencia
+    finInvestigacion DATE  -- Renombrado para consistencia
 );
 
 -- Crear la tabla Investigador_Proyecto
@@ -112,8 +110,7 @@ CREATE TABLE Investigador_Proyecto (
     proyecto INT,
     PRIMARY KEY (investigador, proyecto),
     FOREIGN KEY (investigador) REFERENCES Personal(ID),
-    FOREIGN KEY (proyecto) REFERENCES ProyectoInvestigacion(ID)
-);
+    FOREIGN KEY (proyecto) REFERENCES ProyectoInvestigacion(ID));
 
 -- Crear la tabla Especies_Investigadas
 CREATE TABLE Especies_Investigadas (
@@ -127,13 +124,13 @@ CREATE TABLE Especies_Investigadas (
 -- Crear la tabla Alojamiento
 CREATE TABLE Alojamiento (
     ID INT AUTO_INCREMENT PRIMARY KEY,
-    categoria ENUM('cabaña', 'hotel', 'campings'), -- Ajustado según tu script
+    categoria ENUM('cabaña', 'hotel', 'campings'),
     capacidad INT,
     parque INT,
     FOREIGN KEY (parque) REFERENCES Parque(ID)
 );
 
--- Crear la tabla Visitante (renombrado de Visitantes en el ERD)
+-- Crear la tabla Visitante
 CREATE TABLE Visitante (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     cedula VARCHAR(15) NOT NULL,
@@ -143,7 +140,7 @@ CREATE TABLE Visitante (
     direccion VARCHAR(50) NOT NULL,
     telefono VARCHAR(13),
     profesion VARCHAR(50) NOT NULL,
-    alojamiento INT, -- En el ERD no tiene esta relación, pero la mantengo de tu script
+    alojamiento INT,
     FOREIGN KEY (alojamiento) REFERENCES Alojamiento(ID)
 );
 
@@ -155,8 +152,7 @@ CREATE TABLE Visita (
     area INT,
     visitante INT,
     FOREIGN KEY (area) REFERENCES Area(ID),
-    FOREIGN KEY (visitante) REFERENCES Visitante(ID)
-);
+    FOREIGN KEY (visitante) REFERENCES Visitante(ID));
 
 -- Crear la tabla Personal_Gestion_Visita
 CREATE TABLE Personal_Gestion_Visita (
@@ -164,5 +160,4 @@ CREATE TABLE Personal_Gestion_Visita (
     visita INT,
     PRIMARY KEY (gestion, visita),
     FOREIGN KEY (gestion) REFERENCES Personal(ID),
-    FOREIGN KEY (visita) REFERENCES Visita(ID)
-);
+    FOREIGN KEY (visita) REFERENCES Visita(ID));
