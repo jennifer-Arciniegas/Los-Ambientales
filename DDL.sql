@@ -1,5 +1,5 @@
 
-DROP DATABASE IF EXISTS Gestion_Parques_Naturales;
+ DROP DATABASE IF EXISTS Gestion_Parques_Naturales;
 
 CREATE DATABASE Gestion_Parques_Naturales;
 USE Gestion_Parques_Naturales;
