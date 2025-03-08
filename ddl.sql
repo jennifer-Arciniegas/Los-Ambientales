@@ -21,7 +21,7 @@ create table Parque (ID int auto_increment primary key,  nombre varchar(100) not
   numero_inventario int not null, tipo enum('Animal','Mineral','Vegetal') not null,  Area_id int, foreign key (Area_id) references Area(ID));
  
  create table Personal(ID int auto_increment primary key, 
- cedula varchar(15) not null, nombre varchar(50) not null, Apellido1 varchar(50) not null, Apellido2 varchar(50) not null, 
+ cedula varchar(15) not null, nombre varchar(100) not null, Apellido1 varchar(50) not null, Apellido2 varchar(50) not null, 
  direccion varchar(50) not null, telefono varchar(13), telefono_movil varchar(13) not null, tipoCodigo enum("001", "002", "003", "004"),
  tipoPersonal enum("Gestion", "Vigilancia", "Conservacion", "Investigador"),  especialidad varchar(50), sueldo double not null,
  Area_id int, foreign key(Area_id) references Area(ID));
@@ -31,7 +31,7 @@ create table Vehiculo(ID int auto_increment primary key, tipo varchar(50) not nu
 create table Vigilante_vehiculo(vigilante_id int, vehiculo_id int,
 foreign key(vigilante_id) references Personal(ID), foreign key(vehiculo_id) references Vehiculo(ID), primary key(vigilante_id,vehiculo_id));
 
-create table ProyectoInvestigacion (ID int auto_increment primary key, nombre varchar(50) not null, presupuesto double not null,
+create table ProyectoInvestigacion (ID int auto_increment primary key, nombre text not null, presupuesto double not null,
 inicioInvestigacio date not null, finInvestigacion date );
 
 create table investigador_proyecto(investigador int, proyecto int, 

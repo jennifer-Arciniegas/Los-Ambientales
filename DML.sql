@@ -161,7 +161,6 @@ INSERT INTO Parque (nombre, fecha_declaracion) VALUES
 
 -- Inserciones para Departamento_Parque
 INSERT INTO Departamento_Parque (Departamento_id, parque_id) VALUES 
-(12, 1),
 (13, 2),
 (29, 3),
 (7, 4),
