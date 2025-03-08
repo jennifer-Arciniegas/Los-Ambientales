@@ -316,6 +316,117 @@ delimiter ;
  -- call reg_proyecto_investigacion( 'Estudio de Especies Marinas', 200000, '2025-04-01',  '2026-04-01',  10);
 
 
+-- 15. Actualizar presupuesto de un proyecto de investigación
+delimiter $$
 
+create procedure actualizar_presupuesto_proyecto(
+    in p_id int,
+    in p_presupuesto double
+)
+begin
+    -- Variable para verificar si el proyecto existe
+    declare existe int default 0;
 
+    -- Verificar si el proyecto de investigación existe
+    select count(*) into existe from ProyectoInvestigacion where ID = p_id;
 
+   
+    if existe = 0 then
+        signal sqlstate '45000'
+        set message_text = 'Error: El proyecto de investigación no existe.';
+    else
+        
+        update ProyectoInvestigacion 
+        set presupuesto = p_presupuesto
+        where ID = p_id;
+
+        select * from ProyectoInvestigacion where ID = p_id;
+    end if;
+    
+end $$
+
+delimiter ;
+
+-- prueba de funcionamiento
+-- call actualizar_presupuesto_proyecto(52, 750000);
+
+-- 16. Asignar investigador a un proyecto
+
+delimiter $$ 
+
+create procedure AsignarInvestigadorProyecto(in IDInvestigador int, in IDInvestigacion int)
+begin
+	declare existeInvestigador int default 0;
+	declare existeInvestigacion int default 0;
+	
+	-- Verificar si el investigador existe y tiene cargo_id = 4 (investigador)
+	select count(*) into existeInvestigador from Personal where ID = IDInvestigador and cargo_id = 4;
+	
+	-- Verificar si la investigación existe
+	select count(*) into existeInvestigacion from ProyectoInvestigacion where ID = IDInvestigacion;
+	
+	-- Validaciones
+	if existeInvestigador = 0 then
+		signal sqlstate '45000'
+		set message_text = 'El investigador no existe o no tiene el cargo adecuado.';
+	elseif existeInvestigacion = 0 then 
+		signal sqlstate '45000'
+		set message_text = 'La investigación no existe.';
+	else 
+		-- Insertar la relación en la tabla de asignaciones
+		insert into Investigador_Proyecto (investigador, proyecto) 
+		values (IDInvestigador, IDInvestigacion); 
+		
+		-- Mostrar la asignación realizada
+		select p.nombre as "Investigador", pi.nombre as "Investigación"
+		from Investigador_Proyecto ip
+		join Personal p on p.ID = ip.investigador
+		join ProyectoInvestigacion pi on pi.ID = ip.proyecto
+		where p.ID = IDInvestigador and pi.ID = IDInvestigacion;
+	end if;
+	
+end $$
+
+delimiter ;
+-- prueba de funcionamiento
+-- call AsignarInvestigadorProyecto(40, 52);
+
+-- 18. Calcular presupuesto total de todos los proyectos
+delimiter $$
+create procedure CalcularPresupuestoTotal()
+begin
+	select ifnull(sum(presupuesto), 0) as Total from ProyectoInvestigacion;
+end$$ 
+
+delimiter ;
+-- prueba de funcionamiento
+-- call CalcularPresupuestoTotal;
+
+-- 19. Actualizar fechas de un proyecto de investigación
+delimiter $$
+create procedure ActualizarFechasProyecto(in p_id int, in f_inicio date, in f_fin date)
+begin
+	update ProyectoInvestigacion 
+	set inicioInvestigacion = f_inicio, finInvestigacion = f_fin
+	where ID = p_id;
+
+	select * from ProyectoInvestigacion where ID = p_id;
+end$$
+
+delimiter ;
+-- prueba de funcionamiento
+-- call ActualizarFechasProyecto(52, "2025-04-01", "2027-04-01");
+
+-- 20. Generar informe de proyectos por investigador
+delimiter $$ 
+create procedure InformeProyectosInvestigador()
+begin
+	select p.nombre as Investigador, count(ip.proyecto) as Proyectos
+	from Personal p 
+	join Investigador_Proyecto ip on p.ID = ip.investigador
+	group by p.id, p.nombre
+	order by Proyectos desc;
+end $$
+delimiter ;
+
+call InformeProyectosInvestigador();
