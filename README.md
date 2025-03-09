@@ -33,14 +33,20 @@ Ejemplo: Conocer la superficie total de un parque específico, en este caso solo
 -- select SuperficieTotalParque(1);
 **Triggers**: Se activan automáticamente ante cambios en las tablas para garantizar integridad y seguridad.
 Ejemplo: Registrar cambio salarial de personal el cual se ejecuta automaticamente 
+
 **Eventos**: Programan tareas automáticas en momentos específicos, como limpieza de datos.
 Ejemplo: Generar reporte semanal de visitantes por parque el cual se genera automatica pasados los 7 dias de su ejecucion. 
+
 **Roles** creados en la base de datos permiten una gestión eficiente y segura del sistema, asegurando que cada usuario tenga acceso solo a la información y funcionalidades necesarias para sus tareas.
 **Administrador**: Tiene acceso total al sistema, permitiendo gestionar todos los datos y configuraciones sin restricciones.
 Ejemplo: 
+
 **Gestor de Parques**: Encargado de administrar la información sobre parques, áreas y especies, asegurando la actualización y mantenimiento de estos registros.
+
 **Investigador**: Accede a los datos de especies y proyectos, lo que facilita el análisis e investigación sin modificar la información.
+
 **Auditor**: Solo puede consultar reportes financieros, lo que permite una revisión transparente de los recursos sin riesgo de modificaciones accidentales.
+
 **Encargado de Visitantes**: Administra la información de visitantes y alojamientos, asegurando una gestión eficiente de la experiencia de los visitantes en los parques.
 
 ### Licencia y Contacto: 
