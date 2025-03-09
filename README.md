@@ -16,6 +16,7 @@ Ejecutarse en DBeaver 25.0.0 MySQL versión
 5. Para ejecutar funciones almacenadas, usa:
 6.Para habilitar y verificar eventos programados:
 7. Para verificar triggers en la base de datos:
+   
 ### Estructura de la Base de Datos:
 **Consultas**: Se ejecutan para cosultar datos de las tablas y fltrar los datos.
 ejemplo: Consultar la cantidad de personal con cargo_id = 001 (Personal de Gestión)
@@ -27,10 +28,12 @@ where cargo_id = 001;
 Ejemplo: Registrar un parque una vez creado el procedimiento 1, se podran registrar parque mediante:  
 -- prueba de funcionamiento
 -- CALL RegistrarParque("Parque laguna lunar", "2025-02-13", 3);
+
 **Funciones**: Devuelven un valor específico a partir de cálculos o consultas.
 Ejemplo: Conocer la superficie total de un parque específico, en este caso solo debe ingresar el ID del parque.
 -- prueba de funcionamiento
 -- select SuperficieTotalParque(1);
+
 **Triggers**: Se activan automáticamente ante cambios en las tablas para garantizar integridad y seguridad.
 Ejemplo: Registrar cambio salarial de personal el cual se ejecuta automaticamente 
 
