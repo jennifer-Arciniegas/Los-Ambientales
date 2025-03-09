@@ -428,5 +428,5 @@ begin
 	order by Proyectos desc;
 end $$
 delimiter ;
-
-call InformeProyectosInvestigador();
+-- prueba de funcionamiento
+-- call InformeProyectosInvestigador();
