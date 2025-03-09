@@ -38,6 +38,7 @@ Ejemplo: Registrar cambio salarial de personal el cual se ejecuta automaticament
 Ejemplo: Generar reporte semanal de visitantes por parque el cual se genera automatica pasados los 7 dias de su ejecucion. 
 
 **Roles** creados en la base de datos permiten una gestión eficiente y segura del sistema, asegurando que cada usuario tenga acceso solo a la información y funcionalidades necesarias para sus tareas.
+
 **Administrador**: Tiene acceso total al sistema, permitiendo gestionar todos los datos y configuraciones sin restricciones.
 Ejemplo: 
 
